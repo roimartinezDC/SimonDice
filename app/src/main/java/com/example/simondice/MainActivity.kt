@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import kotlinx.coroutines.*
+import kotlinx.coroutines.NonCancellable.join
+import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRojo.setOnClickListener {
+            var encRojo = GlobalScope.launch(Dispatchers.Main) {
+                btnRojo.setBackgroundResource(R.color.rojo_encendido)
+                delay(300L)
+                btnRojo.setBackgroundResource(R.color.rojo_apagado)
+            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(1)
@@ -49,6 +56,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btnVerde.setOnClickListener {
+            var encVerde = GlobalScope.launch(Dispatchers.Main) {
+                btnVerde.setBackgroundResource(R.color.verde_encendido)
+                delay(300L)
+                btnVerde.setBackgroundResource(R.color.verde_apagado)
+            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(2)
@@ -64,6 +76,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btnAmarillo.setOnClickListener {
+            var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
+                btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
+                delay(300L)
+                btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
+            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(3)
@@ -79,6 +96,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
         btnAzul.setOnClickListener {
+            var encAzul = GlobalScope.launch(Dispatchers.Main) {
+                btnAzul.setBackgroundResource(R.color.azul_encendido)
+                delay(300L)
+                btnAzul.setBackgroundResource(R.color.azul_apagado)
+            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(4)
@@ -97,8 +119,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     @OptIn(DelicateCoroutinesApi::class)
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         arraySentencia = ArrayList()
@@ -111,43 +131,34 @@ class MainActivity : AppCompatActivity() {
         }
         arrayColores.add(nuevoColor)
 
-        var tiempo : Long = 0
-        for (i in 0 until arrayColores.size) {
-            tiempo += 500L
-            when (arrayColores[i]) {
-                1 -> {
-                    var encenderRojo = GlobalScope.launch(Dispatchers.Main) {
-                        delay(tiempo)
+        val encender = GlobalScope.launch(Dispatchers.Main) {
+            delay(1000L)
+            for (i in 0 until arrayColores.size) {
+                delay(500L)
+                when (arrayColores[i]) {
+                    1 -> {
                         rojoBtn.setBackgroundResource(R.color.rojo_encendido)
                         delay(500L)
                         rojoBtn.setBackgroundResource(R.color.rojo_apagado)
                     }
-                }
-                2 -> {
-                    var encenderVerde = GlobalScope.launch(Dispatchers.Main) {
-                        delay(tiempo)
+                    2 -> {
                         verdeBtn.setBackgroundResource(R.color.verde_encendido)
                         delay(500L)
                         verdeBtn.setBackgroundResource(R.color.verde_apagado)
                     }
-                }
-                3 -> {
-                    var encenderAmarillo = GlobalScope.launch(Dispatchers.Main) {
-                        delay(tiempo)
+                    3 -> {
                         amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
                         delay(500L)
                         amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
                     }
-                }
-                else -> {
-                    var encenderAzul = GlobalScope.launch(Dispatchers.Main) {
-                        delay(tiempo)
+                    else -> {
                         azulBtn.setBackgroundResource(R.color.azul_encendido)
                         delay(500L)
                         azulBtn.setBackgroundResource(R.color.azul_apagado)
                     }
                 }
             }
+
         }
     }
     private fun genColor(): Int {
