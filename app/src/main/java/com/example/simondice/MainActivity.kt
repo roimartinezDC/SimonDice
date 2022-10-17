@@ -33,77 +33,97 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRojo.setOnClickListener {
-            var encRojo = GlobalScope.launch(Dispatchers.Main) {
-                btnRojo.setBackgroundResource(R.color.rojo_encendido)
-                delay(300L)
-                btnRojo.setBackgroundResource(R.color.rojo_apagado)
-            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(1)
                     if (arraySentencia == arrayColores) {
+                        var encRojo = GlobalScope.launch(Dispatchers.Main) {
+                            btnRojo.setBackgroundResource(R.color.rojo_encendido)
+                            delay(300L)
+                            btnRojo.setBackgroundResource(R.color.rojo_apagado)
+                        }
                         colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
                         colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
+                    var encRojo = GlobalScope.launch(Dispatchers.Main) {
+                        btnRojo.setBackgroundResource(R.color.rojo_encendido)
+                        delay(300L)
+                        btnRojo.setBackgroundResource(R.color.rojo_apagado)
+                    }
                     arraySentencia.add(1)
                 }
             }
         }
         btnVerde.setOnClickListener {
-            var encVerde = GlobalScope.launch(Dispatchers.Main) {
-                btnVerde.setBackgroundResource(R.color.verde_encendido)
-                delay(300L)
-                btnVerde.setBackgroundResource(R.color.verde_apagado)
-            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(2)
                     if (arraySentencia == arrayColores) {
+                        var encVerde = GlobalScope.launch(Dispatchers.Main) {
+                            btnVerde.setBackgroundResource(R.color.verde_encendido)
+                            delay(300L)
+                            btnVerde.setBackgroundResource(R.color.verde_apagado)
+                        }
                         colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
                         colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
+                    var encVerde = GlobalScope.launch(Dispatchers.Main) {
+                        btnVerde.setBackgroundResource(R.color.verde_encendido)
+                        delay(300L)
+                        btnVerde.setBackgroundResource(R.color.verde_apagado)
+                    }
                     arraySentencia.add(2)
                 }
             }
         }
         btnAmarillo.setOnClickListener {
-            var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
-                btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
-                delay(300L)
-                btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
-            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(3)
                     if (arraySentencia == arrayColores) {
+                        var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
+                            btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
+                            delay(300L)
+                            btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
+                        }
                         colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
                         colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
+                    var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
+                        btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
+                        delay(300L)
+                        btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
+                    }
                     arraySentencia.add(3)
                 }
             }
         }
         btnAzul.setOnClickListener {
-            var encAzul = GlobalScope.launch(Dispatchers.Main) {
-                btnAzul.setBackgroundResource(R.color.azul_encendido)
-                delay(300L)
-                btnAzul.setBackgroundResource(R.color.azul_apagado)
-            }
             if (start) {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(4)
                     if (arraySentencia == arrayColores) {
+                        var encAzul = GlobalScope.launch(Dispatchers.Main) {
+                            btnAzul.setBackgroundResource(R.color.azul_encendido)
+                            delay(300L)
+                            btnAzul.setBackgroundResource(R.color.azul_apagado)
+                        }
                         colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
                         colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
+                    var encAzul = GlobalScope.launch(Dispatchers.Main) {
+                        btnAzul.setBackgroundResource(R.color.azul_encendido)
+                        delay(300L)
+                        btnAzul.setBackgroundResource(R.color.azul_apagado)
+                    }
                     arraySentencia.add(4)
                 }
             }
@@ -143,6 +163,7 @@ class MainActivity : AppCompatActivity() {
             verdeBtn.setBackgroundResource(R.color.verde_encendido)
             amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
             azulBtn.setBackgroundResource(R.color.azul_encendido)
+            delay(300L)
         }
     }
 
