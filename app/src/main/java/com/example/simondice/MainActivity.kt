@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import java.util.*
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
-    var arrayColores = ArrayList<Int>()
+    private var arrayColores = ArrayList<Int>()
+    private var arraySentencia = ArrayList<Int>()
+    private var start = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,11 +24,71 @@ class MainActivity : AppCompatActivity() {
         val btnAmarillo : Button = findViewById(R.id.button_yellow)
         val btnAzul : Button = findViewById(R.id.button_blue)
         val btnStart : Button = findViewById(R.id.btn_start)
+        val textView : TextView = findViewById(R.id.textView)
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
             arrayColores.add(cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul))
+            start = true
         }
+
+        btnRojo.setOnClickListener {
+            if (start) {
+                if (arraySentencia.size == arrayColores.size-1) {
+                    arraySentencia.add(1)
+                    if (arraySentencia == arrayColores) {
+                        textView.text = "Acertaste"
+                    } else {
+                        textView.text = "Perdiste"
+                    }
+                } else if (arraySentencia.size < arrayColores.size) {
+                    arraySentencia.add(1)
+                }
+            }
+        }
+        btnVerde.setOnClickListener {
+            if (start) {
+                if (arraySentencia.size == arrayColores.size-1) {
+                    arraySentencia.add(2)
+                    if (arraySentencia == arrayColores) {
+                        textView.text = "Acertaste"
+                    } else {
+                        textView.text = "Perdiste"
+                    }
+                } else if (arraySentencia.size < arrayColores.size) {
+                    arraySentencia.add(2)
+                }
+            }
+        }
+        btnAmarillo.setOnClickListener {
+            if (start) {
+                if (arraySentencia.size == arrayColores.size-1) {
+                    arraySentencia.add(3)
+                    if (arraySentencia == arrayColores) {
+                        textView.text = "Acertaste"
+                    } else {
+                        textView.text = "Perdiste"
+                    }
+                } else if (arraySentencia.size < arrayColores.size) {
+                    arraySentencia.add(3)
+                }
+            }
+        }
+        btnAzul.setOnClickListener {
+            if (start) {
+                if (arraySentencia.size == arrayColores.size-1) {
+                    arraySentencia.add(4)
+                    if (arraySentencia == arrayColores) {
+                        textView.text = "Acertaste"
+                    } else {
+                        textView.text = "Perdiste"
+                    }
+                } else if (arraySentencia.size < arrayColores.size) {
+                    arraySentencia.add(4)
+                }
+            }
+        }
+
     }
 
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) : Int {
