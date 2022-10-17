@@ -14,6 +14,8 @@ class MainActivity : AppCompatActivity() {
     private var arrayColores = ArrayList<Int>()
     private var arraySentencia = ArrayList<Int>()
     private var start = false
+    private val tiempoTrans = 400L
+    private val clickdelay = 250L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,141 +31,102 @@ class MainActivity : AppCompatActivity() {
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
             cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
-            start = true
         }
 
         btnRojo.setOnClickListener {
-            if (start) {
-                if (arraySentencia.size == arrayColores.size-1) {
-                    arraySentencia.add(1)
-                    if (arraySentencia == arrayColores) {
-                        var encRojo = GlobalScope.launch(Dispatchers.Main) {
-                            btnRojo.setBackgroundResource(R.color.rojo_encendido)
-                            delay(300L)
-                            btnRojo.setBackgroundResource(R.color.rojo_apagado)
-                        }
-                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    } else {
-                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    }
-                } else if (arraySentencia.size < arrayColores.size) {
-                    var encRojo = GlobalScope.launch(Dispatchers.Main) {
-                        btnRojo.setBackgroundResource(R.color.rojo_encendido)
-                        delay(300L)
-                        btnRojo.setBackgroundResource(R.color.rojo_apagado)
-                    }
-                    arraySentencia.add(1)
-                }
-            }
+            comprobar(btnRojo, R.drawable.hex_rojo_encendido, R.drawable.hex_rojo_apagado, 1, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnVerde.setOnClickListener {
-            if (start) {
-                if (arraySentencia.size == arrayColores.size-1) {
-                    arraySentencia.add(2)
-                    if (arraySentencia == arrayColores) {
-                        var encVerde = GlobalScope.launch(Dispatchers.Main) {
-                            btnVerde.setBackgroundResource(R.color.verde_encendido)
-                            delay(300L)
-                            btnVerde.setBackgroundResource(R.color.verde_apagado)
-                        }
-                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    } else {
-                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    }
-                } else if (arraySentencia.size < arrayColores.size) {
-                    var encVerde = GlobalScope.launch(Dispatchers.Main) {
-                        btnVerde.setBackgroundResource(R.color.verde_encendido)
-                        delay(300L)
-                        btnVerde.setBackgroundResource(R.color.verde_apagado)
-                    }
-                    arraySentencia.add(2)
-                }
-            }
+            comprobar(btnVerde, R.drawable.hex_verde_encendido, R.drawable.hex_verde_apagado, 2, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnAmarillo.setOnClickListener {
-            if (start) {
-                if (arraySentencia.size == arrayColores.size-1) {
-                    arraySentencia.add(3)
-                    if (arraySentencia == arrayColores) {
-                        var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
-                            btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
-                            delay(300L)
-                            btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
-                        }
-                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    } else {
-                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    }
-                } else if (arraySentencia.size < arrayColores.size) {
-                    var encAmarillo = GlobalScope.launch(Dispatchers.Main) {
-                        btnAmarillo.setBackgroundResource(R.color.amarillo_encendido)
-                        delay(300L)
-                        btnAmarillo.setBackgroundResource(R.color.amarillo_apagado)
-                    }
-                    arraySentencia.add(3)
-                }
-            }
+            comprobar(btnAmarillo, R.drawable.hex_amarillo_encendido, R.drawable.hex_amarillo_apagado, 3, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnAzul.setOnClickListener {
-            if (start) {
-                if (arraySentencia.size == arrayColores.size-1) {
-                    arraySentencia.add(4)
-                    if (arraySentencia == arrayColores) {
-                        var encAzul = GlobalScope.launch(Dispatchers.Main) {
-                            btnAzul.setBackgroundResource(R.color.azul_encendido)
-                            delay(300L)
-                            btnAzul.setBackgroundResource(R.color.azul_apagado)
-                        }
-                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
-                    } else {
-                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
+            comprobar(btnAzul, R.drawable.hex_azul_encendido, R.drawable.hex_azul_apagado, 4, btnRojo, btnVerde, btnAmarillo, btnAzul)
+        }
+
+    }
+
+    private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
+        if (start) {
+            if (arraySentencia.size == arrayColores.size-1) {
+                arraySentencia.add(index)
+                if (arraySentencia == arrayColores) {
+                    val enc = GlobalScope.launch(Dispatchers.Main) {
+                        btn.setBackgroundResource(colorEnc)
+                        delay(clickdelay)
+                        btn.setBackgroundResource(colorApg)
                     }
-                } else if (arraySentencia.size < arrayColores.size) {
-                    var encAzul = GlobalScope.launch(Dispatchers.Main) {
-                        btnAzul.setBackgroundResource(R.color.azul_encendido)
-                        delay(300L)
-                        btnAzul.setBackgroundResource(R.color.azul_apagado)
-                    }
-                    arraySentencia.add(4)
+                    enc.start()
+                    colorAcierto(brojo, bverde, bamarillo, bazul)
+                } else {
+                    colorError(brojo, bverde, bamarillo, bazul)
+                }
+            } else if (arraySentencia.size < arrayColores.size) {
+                val enc = GlobalScope.launch(Dispatchers.Main) {
+                    btn.setBackgroundResource(colorEnc)
+                    delay(clickdelay)
+                    btn.setBackgroundResource(colorApg)
+                }
+                enc.start()
+                arraySentencia.add(index)
+                if (arraySentencia[arraySentencia.size-1] != arrayColores[arraySentencia.size-1]) {
+                    colorError(brojo, bverde, bamarillo, bazul)
                 }
             }
         }
-
     }
 
     private fun colorAcierto(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         val acierto = GlobalScope.launch(Dispatchers.Main) {
-            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
-            verdeBtn.setBackgroundResource(R.color.verde_encendido)
-            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
-            azulBtn.setBackgroundResource(R.color.azul_encendido)
-            delay(300L)
-            rojoBtn.setBackgroundResource(R.color.rojo_apagado)
-            verdeBtn.setBackgroundResource(R.color.verde_apagado)
-            amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
-            azulBtn.setBackgroundResource(R.color.azul_apagado)
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+            delay(clickdelay)
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
 
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
+        acierto.start()
     }
 
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+        start = false
         val error = GlobalScope.launch(Dispatchers.Main) {
-            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
-            verdeBtn.setBackgroundResource(R.color.verde_encendido)
-            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
-            azulBtn.setBackgroundResource(R.color.azul_encendido)
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
             delay(100L)
-            rojoBtn.setBackgroundResource(R.color.rojo_apagado)
-            verdeBtn.setBackgroundResource(R.color.verde_apagado)
-            amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
-            azulBtn.setBackgroundResource(R.color.azul_apagado)
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
             delay(100L)
-            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
-            verdeBtn.setBackgroundResource(R.color.verde_encendido)
-            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
-            azulBtn.setBackgroundResource(R.color.azul_encendido)
-            delay(300L)
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+        }
+        error.start()
+
+        val btnStart : Button = findViewById(R.id.btn_start)
+        btnStart.setText(R.string.play_again)
+        btnStart.visibility = View.VISIBLE
+        btnStart.setOnClickListener {
+            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
+            btnStart.visibility = View.INVISIBLE
+            arrayColores = ArrayList<Int>()
+            arraySentencia = ArrayList<Int>()
+            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
     }
 
@@ -173,50 +136,51 @@ class MainActivity : AppCompatActivity() {
         nuevoColor()
 
         val encender = GlobalScope.launch(Dispatchers.Main) {
-            delay(200L)
             for (i in 0 until arrayColores.size) {
-                delay(400L)
+                delay(450L)
                 when (arrayColores[i]) {
                     1 -> {
-                        rojoBtn.setBackgroundResource(R.color.rojo_encendido)
-                        delay(400L)
-                        rojoBtn.setBackgroundResource(R.color.rojo_apagado)
+                        rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
+                        delay(tiempoTrans)
+                        rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
                     }
                     2 -> {
-                        verdeBtn.setBackgroundResource(R.color.verde_encendido)
-                        delay(400L)
-                        verdeBtn.setBackgroundResource(R.color.verde_apagado)
+                        verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
+                        delay(tiempoTrans)
+                        verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
                     }
                     3 -> {
-                        amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
-                        delay(400L)
-                        amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
+                        amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
+                        delay(tiempoTrans)
+                        amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
                     }
                     else -> {
-                        azulBtn.setBackgroundResource(R.color.azul_encendido)
-                        delay(400L)
-                        azulBtn.setBackgroundResource(R.color.azul_apagado)
+                        azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+                        delay(tiempoTrans)
+                        azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
                     }
                 }
             }
+            start = true
         }
+        encender.start()
     }
     private fun nuevoColor() {
         var nuevoColor = 0
         when (genColor()) {
-            R.color.rojo_encendido ->  nuevoColor = 1
-            R.color.verde_encendido -> nuevoColor = 2
-            R.color.amarillo_encendido -> nuevoColor = 3
-            R.color.azul_encendido -> nuevoColor = 4
+            R.drawable.hex_rojo_encendido ->  nuevoColor = 1
+            R.drawable.hex_verde_encendido -> nuevoColor = 2
+            R.drawable.hex_amarillo_encendido -> nuevoColor = 3
+            R.drawable.hex_azul_encendido -> nuevoColor = 4
         }
         arrayColores.add(nuevoColor)
     }
     private fun genColor(): Int {
         val color = when (Random().nextInt(4) + 1) {
-            1 -> R.color.rojo_encendido
-            2 -> R.color.verde_encendido
-            3 -> R.color.amarillo_encendido
-            else -> R.color.azul_encendido
+            1 -> R.drawable.hex_rojo_encendido
+            2 -> R.drawable.hex_verde_encendido
+            3 -> R.drawable.hex_amarillo_encendido
+            else -> R.drawable.hex_azul_encendido
         }
         return color
     }

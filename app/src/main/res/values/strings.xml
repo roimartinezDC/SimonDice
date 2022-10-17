@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SimonDice</string>
-    <string name="btn_start_text">Start</string>
+    <string name="btn_start_text">START</string>
+    <string name="play_again">JUGAR DE NUEVO</string>
 </resources>
