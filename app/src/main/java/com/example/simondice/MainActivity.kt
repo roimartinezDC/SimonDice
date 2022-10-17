@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -14,8 +15,9 @@ class MainActivity : AppCompatActivity() {
     private var arrayColores = ArrayList<Int>()
     private var arraySentencia = ArrayList<Int>()
     private var start = false
-    private val tiempoTrans = 400L
+    private var tiempoTrans = 400L
     private val clickdelay = 250L
+    private var marcador = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +29,12 @@ class MainActivity : AppCompatActivity() {
         val btnAmarillo : Button = findViewById(R.id.button_yellow)
         val btnAzul : Button = findViewById(R.id.button_blue)
         val btnStart : Button = findViewById(R.id.btn_start)
+        val textMarcador : TextView = findViewById(R.id.marcador)
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
             cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+            textMarcador.text = marcador.toString()
         }
 
         btnRojo.setOnClickListener {
@@ -50,6 +54,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
         if (start) {
+            if (tiempoTrans > 160L) {
+                tiempoTrans -= 10L
+            }
             if (arraySentencia.size == arrayColores.size-1) {
                 arraySentencia.add(index)
                 if (arraySentencia == arrayColores) {
@@ -64,15 +71,16 @@ class MainActivity : AppCompatActivity() {
                     colorError(brojo, bverde, bamarillo, bazul)
                 }
             } else if (arraySentencia.size < arrayColores.size) {
-                val enc = GlobalScope.launch(Dispatchers.Main) {
-                    btn.setBackgroundResource(colorEnc)
-                    delay(clickdelay)
-                    btn.setBackgroundResource(colorApg)
-                }
-                enc.start()
                 arraySentencia.add(index)
                 if (arraySentencia[arraySentencia.size-1] != arrayColores[arraySentencia.size-1]) {
                     colorError(brojo, bverde, bamarillo, bazul)
+                } else {
+                    val enc = GlobalScope.launch(Dispatchers.Main) {
+                        btn.setBackgroundResource(colorEnc)
+                        delay(clickdelay)
+                        btn.setBackgroundResource(colorApg)
+                    }
+                    enc.start()
                 }
             }
         }
@@ -93,6 +101,9 @@ class MainActivity : AppCompatActivity() {
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
         acierto.start()
+        marcador++
+        val textMarcador : TextView = findViewById(R.id.marcador)
+        textMarcador.text = marcador.toString()
     }
 
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
@@ -124,8 +135,12 @@ class MainActivity : AppCompatActivity() {
             amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
             azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
             btnStart.visibility = View.INVISIBLE
-            arrayColores = ArrayList<Int>()
-            arraySentencia = ArrayList<Int>()
+            arrayColores = ArrayList()
+            arraySentencia = ArrayList()
+            tiempoTrans = 400L
+            marcador = 0
+            val textMarcador : TextView = findViewById(R.id.marcador)
+            textMarcador.text = marcador.toString()
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
     }
@@ -137,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
         val encender = GlobalScope.launch(Dispatchers.Main) {
             for (i in 0 until arrayColores.size) {
-                delay(450L)
+                delay(tiempoTrans)
                 when (arrayColores[i]) {
                     1 -> {
                         rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
