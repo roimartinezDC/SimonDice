@@ -4,13 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import kotlinx.coroutines.*
-import kotlinx.coroutines.NonCancellable.join
-import java.lang.Thread.sleep
 import java.util.*
 import kotlin.collections.ArrayList
 
+@OptIn(DelicateCoroutinesApi::class)
 class MainActivity : AppCompatActivity() {
 
     private var arrayColores = ArrayList<Int>()
@@ -27,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         val btnAmarillo : Button = findViewById(R.id.button_yellow)
         val btnAzul : Button = findViewById(R.id.button_blue)
         val btnStart : Button = findViewById(R.id.btn_start)
-        val textView : TextView = findViewById(R.id.textView)
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
@@ -45,10 +42,9 @@ class MainActivity : AppCompatActivity() {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(1)
                     if (arraySentencia == arrayColores) {
-                        textView.text = "Acertaste"
-                        cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
-                        textView.text = "Perdiste"
+                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
                     arraySentencia.add(1)
@@ -65,10 +61,9 @@ class MainActivity : AppCompatActivity() {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(2)
                     if (arraySentencia == arrayColores) {
-                        textView.text = "Acertaste"
-                        cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
-                        textView.text = "Perdiste"
+                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
                     arraySentencia.add(2)
@@ -85,10 +80,9 @@ class MainActivity : AppCompatActivity() {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(3)
                     if (arraySentencia == arrayColores) {
-                        textView.text = "Acertaste"
-                        cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
-                        textView.text = "Perdiste"
+                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
                     arraySentencia.add(3)
@@ -105,10 +99,9 @@ class MainActivity : AppCompatActivity() {
                 if (arraySentencia.size == arrayColores.size-1) {
                     arraySentencia.add(4)
                     if (arraySentencia == arrayColores) {
-                        textView.text = "Acertaste"
-                        cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+                        colorAcierto(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     } else {
-                        textView.text = "Perdiste"
+                        colorError(btnRojo, btnVerde, btnAmarillo, btnAzul)
                     }
                 } else if (arraySentencia.size < arrayColores.size) {
                     arraySentencia.add(4)
@@ -118,10 +111,76 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun colorAcierto(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+        val acierto = GlobalScope.launch(Dispatchers.Main) {
+            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
+            verdeBtn.setBackgroundResource(R.color.verde_encendido)
+            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
+            azulBtn.setBackgroundResource(R.color.azul_encendido)
+            delay(300L)
+            rojoBtn.setBackgroundResource(R.color.rojo_apagado)
+            verdeBtn.setBackgroundResource(R.color.verde_apagado)
+            amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
+            azulBtn.setBackgroundResource(R.color.azul_apagado)
 
-    @OptIn(DelicateCoroutinesApi::class)
+            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
+        }
+    }
+
+    private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+        val error = GlobalScope.launch(Dispatchers.Main) {
+            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
+            verdeBtn.setBackgroundResource(R.color.verde_encendido)
+            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
+            azulBtn.setBackgroundResource(R.color.azul_encendido)
+            delay(100L)
+            rojoBtn.setBackgroundResource(R.color.rojo_apagado)
+            verdeBtn.setBackgroundResource(R.color.verde_apagado)
+            amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
+            azulBtn.setBackgroundResource(R.color.azul_apagado)
+            delay(100L)
+            rojoBtn.setBackgroundResource(R.color.rojo_encendido)
+            verdeBtn.setBackgroundResource(R.color.verde_encendido)
+            amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
+            azulBtn.setBackgroundResource(R.color.azul_encendido)
+        }
+    }
+
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         arraySentencia = ArrayList()
+
+        nuevoColor()
+
+        val encender = GlobalScope.launch(Dispatchers.Main) {
+            delay(200L)
+            for (i in 0 until arrayColores.size) {
+                delay(400L)
+                when (arrayColores[i]) {
+                    1 -> {
+                        rojoBtn.setBackgroundResource(R.color.rojo_encendido)
+                        delay(400L)
+                        rojoBtn.setBackgroundResource(R.color.rojo_apagado)
+                    }
+                    2 -> {
+                        verdeBtn.setBackgroundResource(R.color.verde_encendido)
+                        delay(400L)
+                        verdeBtn.setBackgroundResource(R.color.verde_apagado)
+                    }
+                    3 -> {
+                        amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
+                        delay(400L)
+                        amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
+                    }
+                    else -> {
+                        azulBtn.setBackgroundResource(R.color.azul_encendido)
+                        delay(400L)
+                        azulBtn.setBackgroundResource(R.color.azul_apagado)
+                    }
+                }
+            }
+        }
+    }
+    private fun nuevoColor() {
         var nuevoColor = 0
         when (genColor()) {
             R.color.rojo_encendido ->  nuevoColor = 1
@@ -130,36 +189,6 @@ class MainActivity : AppCompatActivity() {
             R.color.azul_encendido -> nuevoColor = 4
         }
         arrayColores.add(nuevoColor)
-
-        val encender = GlobalScope.launch(Dispatchers.Main) {
-            delay(1000L)
-            for (i in 0 until arrayColores.size) {
-                delay(500L)
-                when (arrayColores[i]) {
-                    1 -> {
-                        rojoBtn.setBackgroundResource(R.color.rojo_encendido)
-                        delay(500L)
-                        rojoBtn.setBackgroundResource(R.color.rojo_apagado)
-                    }
-                    2 -> {
-                        verdeBtn.setBackgroundResource(R.color.verde_encendido)
-                        delay(500L)
-                        verdeBtn.setBackgroundResource(R.color.verde_apagado)
-                    }
-                    3 -> {
-                        amarilloBtn.setBackgroundResource(R.color.amarillo_encendido)
-                        delay(500L)
-                        amarilloBtn.setBackgroundResource(R.color.amarillo_apagado)
-                    }
-                    else -> {
-                        azulBtn.setBackgroundResource(R.color.azul_encendido)
-                        delay(500L)
-                        azulBtn.setBackgroundResource(R.color.azul_apagado)
-                    }
-                }
-            }
-
-        }
     }
     private fun genColor(): Int {
         val color = when (Random().nextInt(4) + 1) {
