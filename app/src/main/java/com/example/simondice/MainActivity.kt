@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.room.Room
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -18,11 +20,27 @@ class MainActivity : AppCompatActivity() {
     private var tiempoTrans = 400L
     private val clickdelay = 250L
     private var marcador = 0
+    private var record = 0
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
+
+        //no se puede instanciar la bd en el hilo principal, por lo que se hace en una corrutine
+        val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
+            //instancia de la bd
+            val room: RecordDB = Room
+                .databaseBuilder(applicationContext,
+                    RecordDB::class.java, "records")
+                .build()
+            //establecemos variable local de record, a puntuación record en la BD
+            record = room.recordDao().getAll()[0].puntuacion
+        }
+        roomCorrutine.start()
 
         val btnRojo : Button = findViewById(R.id.button_red)
         val btnVerde : Button = findViewById(R.id.button_green)
@@ -85,9 +103,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     private fun colorAcierto(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+
         if (tiempoTrans > 160L) {
             tiempoTrans -= 10L
         }
@@ -108,6 +128,18 @@ class MainActivity : AppCompatActivity() {
         acierto.start()
         start = true
         marcador++
+        //validacion de nuevo record
+        if (marcador > record) {
+            Toast.makeText(applicationContext, "¡Has establecido un nuevo récord! : $marcador", Toast.LENGTH_SHORT).show()
+            val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
+                val room: RecordDB = Room
+                    .databaseBuilder(applicationContext,
+                        RecordDB::class.java, "records")
+                    .build()
+                room.recordDao().update(Record(1, marcador))
+            }
+            roomCorrutine.start()
+        }
         val textMarcador : TextView = findViewById(R.id.marcador)
         textMarcador.text = marcador.toString()
     }
@@ -152,6 +184,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+
         arraySentencia = ArrayList()
         nuevoColor()
         val encender = GlobalScope.launch(Dispatchers.Main) {
