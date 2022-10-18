@@ -13,7 +13,7 @@
         android:layout_height="120dp"
         android:layout_marginStart="138dp"
         android:layout_marginTop="92dp"
-        android:background="@drawable/hex_azul_apagado"
+        android:background="@drawable/hex_azul_encendido"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_red"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -24,7 +24,7 @@
         android:layout_height="120dp"
         android:layout_marginStart="138dp"
         android:layout_marginTop="146dp"
-        android:background="@drawable/hex_rojo_apagado"
+        android:background="@drawable/hex_rojo_encendido"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -35,7 +35,7 @@
         android:layout_height="120dp"
         android:layout_marginTop="252dp"
         android:layout_marginEnd="40dp"
-        android:background="@drawable/hex_verde_apagado"
+        android:background="@drawable/hex_verde_encendido"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -46,7 +46,7 @@
         android:layout_height="120dp"
         android:layout_marginStart="42dp"
         android:layout_marginTop="252dp"
-        android:background="@drawable/hex_amarillo_apagado"
+        android:background="@drawable/hex_amarillo_encendido"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -56,7 +56,7 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="411dp"
         android:layout_height="115dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="90dp"
         android:backgroundTint="#EDEDED"
         android:insetBottom="0dp"
         android:text="@string/btn_start_text"

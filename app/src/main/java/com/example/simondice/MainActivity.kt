@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
+            btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
+            btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
+            btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+            btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
             cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
             textMarcador.text = marcador.toString()
         }
@@ -54,9 +58,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
         if (start) {
-            if (tiempoTrans > 160L) {
-                tiempoTrans -= 10L
-            }
             if (arraySentencia.size == arrayColores.size-1) {
                 arraySentencia.add(index)
                 if (arraySentencia == arrayColores) {
@@ -87,7 +88,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun colorAcierto(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+        if (tiempoTrans > 160L) {
+            tiempoTrans -= 10L
+        }
         val acierto = GlobalScope.launch(Dispatchers.Main) {
+            start = false
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
             verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
             amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
@@ -101,6 +106,7 @@ class MainActivity : AppCompatActivity() {
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
         acierto.start()
+        start = true
         marcador++
         val textMarcador : TextView = findViewById(R.id.marcador)
         textMarcador.text = marcador.toString()
@@ -147,10 +153,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         arraySentencia = ArrayList()
-
         nuevoColor()
-
         val encender = GlobalScope.launch(Dispatchers.Main) {
+            start = false
             for (i in 0 until arrayColores.size) {
                 delay(tiempoTrans)
                 when (arrayColores[i]) {
