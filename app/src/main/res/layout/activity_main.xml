@@ -74,12 +74,27 @@
         android:id="@+id/marcador"
         android:layout_width="396dp"
         android:layout_height="50dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="60dp"
         android:textAlignment="center"
-        android:textColor="@color/black"
+        android:textColor="#3A3A3A"
         android:textSize="36sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_blue" />
+
+    <TextView
+        android:id="@+id/recordMsg"
+        android:layout_width="195dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="44dp"
+        android:fontFamily="sans-serif"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/dark_gray"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/button_red"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

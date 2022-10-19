@@ -1,5 +1,6 @@
 package com.example.simondice
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -21,9 +22,6 @@ class MainActivity : AppCompatActivity() {
     private val clickdelay = 250L
     private var marcador = 0
     private var record = 0
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +142,8 @@ class MainActivity : AppCompatActivity() {
         textMarcador.text = marcador.toString()
     }
 
+
+    @SuppressLint("SetTextI18n")
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         val error = GlobalScope.launch(Dispatchers.Main) {
@@ -167,6 +167,9 @@ class MainActivity : AppCompatActivity() {
         val btnStart : Button = findViewById(R.id.btn_start)
         btnStart.setText(R.string.play_again)
         btnStart.visibility = View.VISIBLE
+        val recordMsg : TextView = findViewById(R.id.recordMsg)
+        recordMsg.text = "Récord: $record"
+
         btnStart.setOnClickListener {
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
             verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
@@ -180,11 +183,11 @@ class MainActivity : AppCompatActivity() {
             val textMarcador : TextView = findViewById(R.id.marcador)
             textMarcador.text = marcador.toString()
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
+            recordMsg.text = ""
         }
     }
 
     private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
-
         arraySentencia = ArrayList()
         nuevoColor()
         val encender = GlobalScope.launch(Dispatchers.Main) {
@@ -237,5 +240,4 @@ class MainActivity : AppCompatActivity() {
         }
         return color
     }
-
 }
