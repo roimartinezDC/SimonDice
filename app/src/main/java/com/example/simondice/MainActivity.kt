@@ -111,10 +111,10 @@ class MainActivity : AppCompatActivity() {
         }
         val acierto = GlobalScope.launch(Dispatchers.Main) {
             start = false
-            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
-            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
-            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+            rojoBtn.setBackgroundResource(R.drawable.hex_acierto)
+            verdeBtn.setBackgroundResource(R.drawable.hex_acierto)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_acierto)
+            azulBtn.setBackgroundResource(R.drawable.hex_acierto)
             delay(clickdelay)
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
             verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
@@ -147,20 +147,20 @@ class MainActivity : AppCompatActivity() {
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         val error = GlobalScope.launch(Dispatchers.Main) {
-            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
-            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
-            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+            rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
+            verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_fallo)
+            azulBtn.setBackgroundResource(R.drawable.hex_fallo)
             delay(100L)
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
             verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
             amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
             azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
             delay(100L)
-            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
-            verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
-            azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+            rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
+            verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
+            amarilloBtn.setBackgroundResource(R.drawable.hex_fallo)
+            azulBtn.setBackgroundResource(R.drawable.hex_fallo)
         }
         error.start()
 
