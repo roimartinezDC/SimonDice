@@ -35,6 +35,11 @@ class MainActivity : AppCompatActivity() {
                 .databaseBuilder(applicationContext,
                     RecordDB::class.java, "records")
                 .build()
+
+            //Fragmento de codigo para poder modificar el record de la base de datos
+            //Debe estar siempre comentado
+            //room.recordDao().update(Record(1, 3))
+
             //establecemos variable local de record, a puntuación record en la BD
             record = room.recordDao().getAll()[0].puntuacion
         }
@@ -49,6 +54,8 @@ class MainActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
+            view.top = view.top + 140
+            view.bottom = view.bottom + 140
             btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
             btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
             btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
@@ -128,6 +135,7 @@ class MainActivity : AppCompatActivity() {
         marcador++
         //validacion de nuevo record
         if (marcador > record) {
+            record = marcador
             Toast.makeText(applicationContext, "¡Has establecido un nuevo récord! : $marcador", Toast.LENGTH_SHORT).show()
             val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
                 val room: RecordDB = Room
@@ -167,8 +175,13 @@ class MainActivity : AppCompatActivity() {
         val btnStart : Button = findViewById(R.id.btn_start)
         btnStart.setText(R.string.play_again)
         btnStart.visibility = View.VISIBLE
+
         val recordMsg : TextView = findViewById(R.id.recordMsg)
         recordMsg.text = "Récord: $record"
+
+        val textMarcador : TextView = findViewById(R.id.marcador)
+        textMarcador.top = textMarcador.top - 30
+        textMarcador.bottom = textMarcador.bottom - 30
 
         btnStart.setOnClickListener {
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
@@ -180,8 +193,9 @@ class MainActivity : AppCompatActivity() {
             arraySentencia = ArrayList()
             tiempoTrans = 400L
             marcador = 0
-            val textMarcador : TextView = findViewById(R.id.marcador)
             textMarcador.text = marcador.toString()
+            textMarcador.top = textMarcador.top + 30
+            textMarcador.bottom = textMarcador.bottom + 30
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
             recordMsg.text = ""
         }
