@@ -7,6 +7,8 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.updateLayoutParams
 import androidx.room.Room
 import kotlinx.coroutines.*
 import java.util.*
@@ -54,14 +56,14 @@ class MainActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener { view ->
             view.visibility = View.INVISIBLE
-            view.top = view.top + 140
-            view.bottom = view.bottom + 140
             btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
             btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
             btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
             btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
             cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
             textMarcador.text = marcador.toString()
+            textMarcador.setBackgroundResource(R.drawable.contador_background)
+            textMarcador.setPadding(0,45,0,0)
         }
 
         btnRojo.setOnClickListener {
@@ -112,25 +114,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun colorAcierto(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
-
         if (tiempoTrans > 160L) {
-            tiempoTrans -= 10L
+            tiempoTrans -= 20L
         }
         val acierto = GlobalScope.launch(Dispatchers.Main) {
             start = false
-            rojoBtn.setBackgroundResource(R.drawable.hex_acierto)
-            verdeBtn.setBackgroundResource(R.drawable.hex_acierto)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_acierto)
-            azulBtn.setBackgroundResource(R.drawable.hex_acierto)
-            delay(clickdelay)
-            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
-            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
-            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
-
+            delay(600L)
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
         }
         acierto.start()
+
         start = true
         marcador++
         //validacion de nuevo record
@@ -175,13 +168,23 @@ class MainActivity : AppCompatActivity() {
         val btnStart : Button = findViewById(R.id.btn_start)
         btnStart.setText(R.string.play_again)
         btnStart.visibility = View.VISIBLE
+        //funcion empleada para modificar el constraint bottom de la vista, en este caso el botonStart
+        btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            bottomMargin -= 160
+        }
 
         val recordMsg : TextView = findViewById(R.id.recordMsg)
         recordMsg.text = "Récord: $record"
 
+
         val textMarcador : TextView = findViewById(R.id.marcador)
-        textMarcador.top = textMarcador.top - 30
-        textMarcador.bottom = textMarcador.bottom - 30
+        /*
+        textMarcador.updateLayoutParams<ConstraintLayout.LayoutParams> {
+            topMargin -= 55
+        }
+        textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_SP,50F)
+         */
+
 
         btnStart.setOnClickListener {
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
@@ -189,13 +192,20 @@ class MainActivity : AppCompatActivity() {
             amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
             azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
             btnStart.visibility = View.INVISIBLE
+            btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                bottomMargin += 160
+            }
             arrayColores = ArrayList()
             arraySentencia = ArrayList()
             tiempoTrans = 400L
             marcador = 0
             textMarcador.text = marcador.toString()
-            textMarcador.top = textMarcador.top + 30
-            textMarcador.bottom = textMarcador.bottom + 30
+            /*
+            textMarcador.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                topMargin += 55
+            }
+            textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_SP, 66F)
+             */
             cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
             recordMsg.text = ""
         }
