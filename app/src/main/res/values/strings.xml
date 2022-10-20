@@ -3,5 +3,4 @@
     <string name="btn_start_text">START</string>
     <string name="play_again">JUGAR DE NUEVO</string>
     <string name="record_msg">Récord: </string>
-    <string name="reanudar_msg">Reanudar</string>
 </resources>
