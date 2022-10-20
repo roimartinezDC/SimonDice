@@ -13,7 +13,7 @@
     <color name="azul_apagado">#252853</color>
     <color name="azul_encendido">#0011FF</color>
     <color name="verde_ok">#6BC34B</color>
-    <color name="rojo_fail">#D33723</color>
+    <color name="rojo_fail">#C13E2E</color>
     <color name="background">#CFCFCF</color>
     <color name="background_standby">#636363</color>
 </resources>
