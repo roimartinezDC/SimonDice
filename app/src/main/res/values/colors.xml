@@ -7,7 +7,7 @@
     <color name="rojo_apagado">#7C2525</color>
     <color name="rojo_encendido">#FF0000</color>
     <color name="verde_apagado">#3E6528</color>
-    <color name="verde_encendido">#5BE110</color>
+    <color name="verde_encendido">#5BCA1E</color>
     <color name="amarillo_apagado">#9A9521</color>
     <color name="amarillo_encendido">#FFFB00</color>
     <color name="azul_apagado">#252853</color>
@@ -15,4 +15,5 @@
     <color name="verde_ok">#6BC34B</color>
     <color name="rojo_fail">#D33723</color>
     <color name="background">#CFCFCF</color>
+    <color name="background_standby">#636363</color>
 </resources>

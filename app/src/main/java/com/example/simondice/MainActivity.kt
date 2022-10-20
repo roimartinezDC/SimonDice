@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private val clickdelay = 250L
     private var marcador = 0
     private var record = 0
+    private var firstClick = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +56,13 @@ class MainActivity : AppCompatActivity() {
         val textMarcador : TextView = findViewById(R.id.marcador)
 
         btnStart.setOnClickListener { view ->
+            firstClick = true
             view.visibility = View.INVISIBLE
             btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
             btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
             btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
             btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
-            cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul)
+            cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, true)
             textMarcador.text = marcador.toString()
             textMarcador.setBackgroundResource(R.drawable.contador_background)
             textMarcador.setPadding(0,45,0,0)
@@ -120,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         val acierto = GlobalScope.launch(Dispatchers.Main) {
             start = false
             delay(600L)
-            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
+            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
         }
         acierto.start()
 
@@ -129,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         //validacion de nuevo record
         if (marcador > record) {
             record = marcador
-            Toast.makeText(applicationContext, "¡Has establecido un nuevo récord! : $marcador", Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, "¡Has establecido un nuevo récord!", Toast.LENGTH_SHORT).show()
             val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
                 val room: RecordDB = Room
                     .databaseBuilder(applicationContext,
@@ -147,6 +149,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
+        firstClick = false
         val error = GlobalScope.launch(Dispatchers.Main) {
             rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
             verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
@@ -176,15 +179,7 @@ class MainActivity : AppCompatActivity() {
         val recordMsg : TextView = findViewById(R.id.recordMsg)
         recordMsg.text = "Récord: $record"
 
-
         val textMarcador : TextView = findViewById(R.id.marcador)
-        /*
-        textMarcador.updateLayoutParams<ConstraintLayout.LayoutParams> {
-            topMargin -= 55
-        }
-        textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_SP,50F)
-         */
-
 
         btnStart.setOnClickListener {
             rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
@@ -200,20 +195,17 @@ class MainActivity : AppCompatActivity() {
             tiempoTrans = 400L
             marcador = 0
             textMarcador.text = marcador.toString()
-            /*
-            textMarcador.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                topMargin += 55
-            }
-            textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_SP, 66F)
-             */
-            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn)
+            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
             recordMsg.text = ""
+            firstClick = true
         }
     }
 
-    private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
+    private fun cambiarColor(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button, nuevo : Boolean) {
         arraySentencia = ArrayList()
-        nuevoColor()
+        if (nuevo) {
+            nuevoColor()
+        }
         val encender = GlobalScope.launch(Dispatchers.Main) {
             start = false
             for (i in 0 until arrayColores.size) {
@@ -263,5 +255,38 @@ class MainActivity : AppCompatActivity() {
             else -> R.drawable.hex_azul_encendido
         }
         return color
+    }
+
+    @SuppressLint("SetTextI18n")
+    override fun onRestart() {
+        super.onRestart()
+
+        if (firstClick) {
+            start = false
+            val btnRojo : Button = findViewById(R.id.button_red)
+            val btnVerde : Button = findViewById(R.id.button_green)
+            val btnAmarillo : Button = findViewById(R.id.button_yellow)
+            val btnAzul : Button = findViewById(R.id.button_blue)
+
+            val constrain : ConstraintLayout = findViewById(R.id.cLayout)
+            constrain.setBackgroundResource(R.color.background_standby)
+
+            val btnStart : Button = findViewById(R.id.btn_start)
+            btnStart.visibility = View.VISIBLE
+            btnStart.text = "REANUDAR"
+            btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                bottomMargin += 200
+            }
+
+            btnStart.setOnClickListener {
+                cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, false)
+                btnStart.visibility = View.INVISIBLE
+                btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    bottomMargin -= 200
+                }
+                constrain.setBackgroundResource(R.color.background)
+                start = true
+            }
+        }
     }
 }
