@@ -56,16 +56,20 @@ class MainActivity : AppCompatActivity() {
         val textMarcador : TextView = findViewById(R.id.marcador)
 
         btnStart.setOnClickListener { view ->
-            firstClick = true
-            view.visibility = View.INVISIBLE
-            btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
-            btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
-            btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
-            btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
-            cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, true)
-            textMarcador.text = marcador.toString()
-            textMarcador.setBackgroundResource(R.drawable.contador_background)
-            textMarcador.setPadding(0,45,0,0)
+            val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
+                delay(240L)
+                firstClick = true
+                view.visibility = View.INVISIBLE
+                btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
+                btnVerde.setBackgroundResource(R.drawable.hex_verde_apagado)
+                btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+                btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
+                cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, true)
+                textMarcador.text = marcador.toString()
+                textMarcador.setBackgroundResource(R.drawable.contador_background)
+                textMarcador.setPadding(0,45,0,0)
+            }
+            delayCorrutine.start()
         }
 
         btnRojo.setOnClickListener {
@@ -182,22 +186,26 @@ class MainActivity : AppCompatActivity() {
         val textMarcador : TextView = findViewById(R.id.marcador)
 
         btnStart.setOnClickListener {
-            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
-            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
-            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
-            btnStart.visibility = View.INVISIBLE
-            btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                bottomMargin += 160
+            val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
+                delay(240L)
+                rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+                verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+                amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+                azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
+                btnStart.visibility = View.INVISIBLE
+                btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                    bottomMargin += 160
+                }
+                arrayColores = ArrayList()
+                arraySentencia = ArrayList()
+                tiempoTrans = 400L
+                marcador = 0
+                textMarcador.text = marcador.toString()
+                cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
+                recordMsg.text = ""
+                firstClick = true
             }
-            arrayColores = ArrayList()
-            arraySentencia = ArrayList()
-            tiempoTrans = 400L
-            marcador = 0
-            textMarcador.text = marcador.toString()
-            cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
-            recordMsg.text = ""
-            firstClick = true
+            delayCorrutine.start()
         }
     }
 
@@ -275,17 +283,21 @@ class MainActivity : AppCompatActivity() {
             btnStart.visibility = View.VISIBLE
             btnStart.text = "REANUDAR"
             btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                bottomMargin += 200
+                bottomMargin += 220
             }
 
             btnStart.setOnClickListener {
-                cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, false)
-                btnStart.visibility = View.INVISIBLE
-                btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    bottomMargin -= 200
+                val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
+                    delay(240L)
+                    cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, false)
+                    btnStart.visibility = View.INVISIBLE
+                    btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
+                        bottomMargin -= 220
+                    }
+                    constrain.setBackgroundResource(R.color.background)
+                    start = true
                 }
-                constrain.setBackgroundResource(R.color.background)
-                start = true
+                delayCorrutine.start()
             }
         }
     }
