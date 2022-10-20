@@ -3,6 +3,7 @@ package com.example.simondice
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
             //Fragmento de codigo para poder modificar el record de la base de datos
             //Debe estar siempre comentado
-            //room.recordDao().update(Record(1, 3))
+            //room.recordDao().update(Record(1, 8))
 
             //establecemos variable local de record, a puntuación record en la BD
             record = room.recordDao().getAll()[0].puntuacion
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener { view ->
             val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
-                delay(240L)
+                delay(320L)
                 firstClick = true
                 view.visibility = View.INVISIBLE
                 btnRojo.setBackgroundResource(R.drawable.hex_rojo_apagado)
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, true)
                 textMarcador.text = marcador.toString()
                 textMarcador.setBackgroundResource(R.drawable.contador_background)
-                textMarcador.setPadding(0,45,0,0)
+                textMarcador.setPadding(0,60,0,0)
             }
             delayCorrutine.start()
         }
@@ -147,6 +148,10 @@ class MainActivity : AppCompatActivity() {
         }
         val textMarcador : TextView = findViewById(R.id.marcador)
         textMarcador.text = marcador.toString()
+        if (marcador >= 10) {
+            textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.resources.getDimension(R.dimen.marcador_small))
+            textMarcador.setPadding(0, 77, 0, 0)
+        }
     }
 
 
@@ -177,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         btnStart.visibility = View.VISIBLE
         //funcion empleada para modificar el constraint bottom de la vista, en este caso el botonStart
         btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-            bottomMargin -= 160
+            bottomMargin -= 200
         }
 
         val recordMsg : TextView = findViewById(R.id.recordMsg)
@@ -194,7 +199,7 @@ class MainActivity : AppCompatActivity() {
                 azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
                 btnStart.visibility = View.INVISIBLE
                 btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    bottomMargin += 160
+                    bottomMargin += 200
                 }
                 arrayColores = ArrayList()
                 arraySentencia = ArrayList()

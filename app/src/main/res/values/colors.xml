@@ -15,5 +15,9 @@
     <color name="verde_ok">#6BC34B</color>
     <color name="rojo_fail">#C13E2E</color>
     <color name="background">#CFCFCF</color>
+    <color name="back_degradado_1">#BFCFCFCF</color>
+    <color name="back_degradado_2">#9CCFCFCF</color>
+    <color name="back_degradado_3">#5CCFCFCF</color>
+    <color name="back_degradado_4">#00CFCFCF</color>
     <color name="background_standby">#636363</color>
 </resources>

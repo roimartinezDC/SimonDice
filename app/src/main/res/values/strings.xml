@@ -3,4 +3,5 @@
     <string name="btn_start_text">START</string>
     <string name="play_again">JUGAR DE NUEVO</string>
     <string name="record_msg">Récord: </string>
+    <string name="animation_contentDescription">background_animation</string>
 </resources>
