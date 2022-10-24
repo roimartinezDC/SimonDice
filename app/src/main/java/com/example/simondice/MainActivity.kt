@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private var arrayColores = ArrayList<Int>()
     private var arraySentencia = ArrayList<Int>()
     private var start = false
+    private var encenderColores : Job? = null
     private var tiempoTrans = 400L
     private val clickdelay = 250L
     private var marcador = 0
@@ -222,7 +223,7 @@ class MainActivity : AppCompatActivity() {
         if (nuevo) {
             nuevoColor()
         }
-        val encender = GlobalScope.launch(Dispatchers.Main) {
+        encenderColores = GlobalScope.launch(Dispatchers.Main) {
             start = false
             for (i in 0 until arrayColores.size) {
                 delay(tiempoTrans)
@@ -251,7 +252,6 @@ class MainActivity : AppCompatActivity() {
             }
             start = true
         }
-        encender.start()
     }
     private fun nuevoColor() {
         var nuevoColor = 0
@@ -309,6 +309,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 delayCorrutine.start()
             }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (encenderColores?.isActive == true) {
+            encenderColores!!.cancel()
+            start = true
         }
     }
 }
