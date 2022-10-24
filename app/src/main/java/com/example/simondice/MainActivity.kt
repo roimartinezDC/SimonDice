@@ -49,7 +49,14 @@ class MainActivity : AppCompatActivity() {
             //room.recordDao().update(Record(1, 0))
 
             //establecemos variable local de record, a puntuación record en la BD
-            record = room.recordDao().getAll()[0].puntuacion
+            //try-catch para crear la BD en caso de que sea la primera vez que se ejecuta la app en un dispostivo
+            try {
+                record = room.recordDao().getAll()[0].puntuacion
+            } catch(ex : IndexOutOfBoundsException) {
+                room.recordDao().insert(listOf(Record(1, 0)))
+                record = room.recordDao().getAll()[0].puntuacion
+            }
+
         }
         roomCorrutine.start()
 
@@ -316,6 +323,14 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
         if (encenderColores?.isActive == true) {
             encenderColores!!.cancel()
+
+            /*esto realmente no está sirviendo de nada ahora mismo,
+            pero es para dejar la variable al mismo valor de antes de que se iniciase la corrutina,
+            ya que en la propia corrutina este valor se reestablece pero al final,
+            y si cancelásemos la corrutina a la mitad de la ejecución esto no pasaría.
+            Realmente en el onRestart() si que se volvería a reestablecer pero igual el día de mañana
+            hago algo con el onStop() y esto me evita futuros problemas
+             */
             start = true
         }
     }
