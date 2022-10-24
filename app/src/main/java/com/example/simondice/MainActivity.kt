@@ -40,9 +40,12 @@ class MainActivity : AppCompatActivity() {
                     RecordDB::class.java, "records")
                 .build()
 
+            //Ejecutar esta línea sólo al instalar por primera vez la aplicacion
+            //room.recordDao().insert(listOf(Record(1, 0)))
+
             //Fragmento de codigo para poder modificar el record de la base de datos
             //Debe estar siempre comentado
-            //room.recordDao().update(Record(1, 8))
+            //room.recordDao().update(Record(1, 0))
 
             //establecemos variable local de record, a puntuación record en la BD
             record = room.recordDao().getAll()[0].puntuacion
@@ -182,7 +185,7 @@ class MainActivity : AppCompatActivity() {
         btnStart.visibility = View.VISIBLE
         //funcion empleada para modificar el constraint bottom de la vista, en este caso el botonStart
         btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-            bottomMargin -= 200
+            topMargin += 290
         }
 
         val recordMsg : TextView = findViewById(R.id.recordMsg)
@@ -199,7 +202,7 @@ class MainActivity : AppCompatActivity() {
                 azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
                 btnStart.visibility = View.INVISIBLE
                 btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                    bottomMargin += 200
+                    topMargin -= 290
                 }
                 arrayColores = ArrayList()
                 arraySentencia = ArrayList()
@@ -276,6 +279,7 @@ class MainActivity : AppCompatActivity() {
 
         if (firstClick) {
             start = false
+            firstClick = false
             val btnRojo : Button = findViewById(R.id.button_red)
             val btnVerde : Button = findViewById(R.id.button_green)
             val btnAmarillo : Button = findViewById(R.id.button_yellow)
@@ -288,7 +292,7 @@ class MainActivity : AppCompatActivity() {
             btnStart.visibility = View.VISIBLE
             btnStart.text = "REANUDAR"
             btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                bottomMargin += 220
+                topMargin -= 150
             }
 
             btnStart.setOnClickListener {
@@ -297,9 +301,10 @@ class MainActivity : AppCompatActivity() {
                     cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, false)
                     btnStart.visibility = View.INVISIBLE
                     btnStart.updateLayoutParams<ConstraintLayout.LayoutParams> {
-                        bottomMargin -= 220
+                        topMargin += 150
                     }
                     constrain.setBackgroundResource(R.color.background)
+                    firstClick = true
                     start = true
                 }
                 delayCorrutine.start()

@@ -57,7 +57,7 @@
         style="@style/Widget.AppCompat.Button"
         android:layout_width="411dp"
         android:layout_height="115dp"
-        android:layout_marginBottom="130dp"
+        android:layout_marginTop="100dp"
         android:backgroundTint="#EDEDED"
         android:insetBottom="0dp"
         android:text="@string/btn_start_text"
@@ -67,9 +67,9 @@
         android:textColor="@color/dark_gray"
         android:textSize="26sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_blue" />
 
     <TextView
         android:id="@+id/marcador"
