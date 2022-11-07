@@ -1,6 +1,7 @@
 package com.example.simondice
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.TypedValue
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private var marcador = 0
     private var record = 0
     private var firstClick = false
+    private var sonido : MediaPlayer? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +43,6 @@ class MainActivity : AppCompatActivity() {
                 .databaseBuilder(applicationContext,
                     RecordDB::class.java, "records")
                 .build()
-
-            //Ejecutar esta línea sólo al instalar por primera vez la aplicacion
-            //room.recordDao().insert(listOf(Record(1, 0)))
 
             //Fragmento de codigo para poder modificar el record de la base de datos
             //Debe estar siempre comentado
@@ -85,27 +85,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         btnRojo.setOnClickListener {
-            comprobar(btnRojo, R.drawable.hex_rojo_encendido, R.drawable.hex_rojo_apagado, 1, btnRojo, btnVerde, btnAmarillo, btnAzul)
+            comprobar(btnRojo, R.drawable.hex_rojo_encendido, R.drawable.hex_rojo_apagado, R.raw.red, 1, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnVerde.setOnClickListener {
-            comprobar(btnVerde, R.drawable.hex_verde_encendido, R.drawable.hex_verde_apagado, 2, btnRojo, btnVerde, btnAmarillo, btnAzul)
+            comprobar(btnVerde, R.drawable.hex_verde_encendido, R.drawable.hex_verde_apagado, R.raw.green, 2, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnAmarillo.setOnClickListener {
-            comprobar(btnAmarillo, R.drawable.hex_amarillo_encendido, R.drawable.hex_amarillo_apagado, 3, btnRojo, btnVerde, btnAmarillo, btnAzul)
+            comprobar(btnAmarillo, R.drawable.hex_amarillo_encendido, R.drawable.hex_amarillo_apagado, R.raw.yellow, 3, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
         btnAzul.setOnClickListener {
-            comprobar(btnAzul, R.drawable.hex_azul_encendido, R.drawable.hex_azul_apagado, 4, btnRojo, btnVerde, btnAmarillo, btnAzul)
+            comprobar(btnAzul, R.drawable.hex_azul_encendido, R.drawable.hex_azul_apagado, R.raw.blue, 4, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
 
     }
 
-    private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
+    private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, rutaSonido : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
         if (start) {
             if (arraySentencia.size == arrayColores.size-1) {
                 arraySentencia.add(index)
                 if (arraySentencia == arrayColores) {
                     val enc = GlobalScope.launch(Dispatchers.Main) {
                         btn.setBackgroundResource(colorEnc)
+                        sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
+                        sonido?.start()
                         delay(clickdelay)
                         btn.setBackgroundResource(colorApg)
                     }
@@ -121,6 +123,8 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     val enc = GlobalScope.launch(Dispatchers.Main) {
                         btn.setBackgroundResource(colorEnc)
+                        sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
+                        sonido?.start()
                         delay(clickdelay)
                         btn.setBackgroundResource(colorApg)
                     }
@@ -170,6 +174,8 @@ class MainActivity : AppCompatActivity() {
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         firstClick = false
+        val mp = MediaPlayer.create(this@MainActivity, R.raw.error)
+        mp.start()
         val error = GlobalScope.launch(Dispatchers.Main) {
             rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
             verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
@@ -237,21 +243,29 @@ class MainActivity : AppCompatActivity() {
                 when (arrayColores[i]) {
                     1 -> {
                         rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
+                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.red)
+                        mp?.start()
                         delay(tiempoTrans)
                         rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
                     }
                     2 -> {
                         verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
+                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.green)
+                        mp?.start()
                         delay(tiempoTrans)
                         verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
                     }
                     3 -> {
                         amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
+                        val mp = MediaPlayer.create(this@MainActivity, R.raw.yellow)
+                        mp?.start()
                         delay(tiempoTrans)
                         amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
                     }
                     else -> {
                         azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
+                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.blue)
+                        mp?.start()
                         delay(tiempoTrans)
                         azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
                     }
