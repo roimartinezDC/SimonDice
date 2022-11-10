@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             //Fragmento de codigo para poder modificar el record de la base de datos
             //Debe estar siempre comentado
-            room.recordDao().update(Record(1, 0))
+            //room.recordDao().update(Record(1, 0))
 
             //establecemos variable local de record, a puntuación record en la BD
             //try-catch para crear la BD en caso de que sea la primera vez que se ejecuta la app en un dispostivo
@@ -104,6 +104,14 @@ class MainActivity : AppCompatActivity() {
             comprobar(btnAzul, R.drawable.hex_azul_encendido, R.drawable.hex_azul_apagado, R.raw.blue, 4, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
 
+        //este método actualiza dinámicamente el texto del textView marcador cada vez que se pasa de ronda
+        miModelo.ronda.observe(
+            this,
+            Observer(fun(nuevaRonda: Int) {
+                textMarcador.text = miModelo.ronda.value.toString()
+            })
+        )
+
     }
 
     private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, rutaSonido : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
@@ -156,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         start = true
 
         //sumamos uno a la instancia miModelo
-        miModelo.sumarRonda()
+        //miModelo.sumarRonda()
         //marcador++
 
         //validacion de nuevo record
