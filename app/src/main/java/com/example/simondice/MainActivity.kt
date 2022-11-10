@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
 import androidx.room.Room
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity() {
     private var record = 0
     private var firstClick = false
     private var sonido : MediaPlayer? = null
+    //instancia de la ViewModel
+    private val miModelo by viewModels<MyViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
             //Fragmento de codigo para poder modificar el record de la base de datos
             //Debe estar siempre comentado
-            //room.recordDao().update(Record(1, 0))
+            room.recordDao().update(Record(1, 0))
 
             //establecemos variable local de record, a puntuación record en la BD
             //try-catch para crear la BD en caso de que sea la primera vez que se ejecuta la app en un dispostivo
@@ -77,7 +80,11 @@ class MainActivity : AppCompatActivity() {
                 btnAmarillo.setBackgroundResource(R.drawable.hex_amarillo_apagado)
                 btnAzul.setBackgroundResource(R.drawable.hex_azul_apagado)
                 cambiarColor(btnRojo, btnVerde, btnAmarillo, btnAzul, true)
-                textMarcador.text = marcador.toString()
+
+                //el texto del marcador ahora se contabiliza por el ViewModel
+                textMarcador.text = miModelo.ronda.value.toString()
+                //textMarcador.text = marcador.toString()
+
                 textMarcador.setBackgroundResource(R.drawable.contador_background)
                 textMarcador.setPadding(0,60,0,0)
             }
@@ -147,23 +154,28 @@ class MainActivity : AppCompatActivity() {
         acierto.start()
 
         start = true
-        marcador++
+
+        //sumamos uno a la instancia miModelo
+        miModelo.sumarRonda()
+        //marcador++
+
         //validacion de nuevo record
-        if (marcador > record) {
-            record = marcador
+        //aquí cambié el valor de marcador por miModelo
+        if ((miModelo.ronda.value.toString()).toInt() > record) {
+            record = (miModelo.ronda.value.toString()).toInt()
             Toast.makeText(applicationContext, "¡Has establecido un nuevo récord!", Toast.LENGTH_SHORT).show()
             val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
                 val room: RecordDB = Room
                     .databaseBuilder(applicationContext,
                         RecordDB::class.java, "records")
                     .build()
-                room.recordDao().update(Record(1, marcador))
+                room.recordDao().update(Record(1, (miModelo.ronda.value.toString()).toInt()))
             }
             roomCorrutine.start()
         }
         val textMarcador : TextView = findViewById(R.id.marcador)
-        textMarcador.text = marcador.toString()
-        if (marcador >= 10) {
+        textMarcador.text = miModelo.ronda.value.toString()
+        if ((miModelo.ronda.value.toString()).toInt() >= 10) {
             textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.resources.getDimension(R.dimen.marcador_small))
             textMarcador.setPadding(0, 77, 0, 0)
         }
@@ -221,8 +233,12 @@ class MainActivity : AppCompatActivity() {
                 arrayColores = ArrayList()
                 arraySentencia = ArrayList()
                 tiempoTrans = 400L
-                marcador = 0
-                textMarcador.text = marcador.toString()
+
+                //establecer la variable valor de la intancia a 0
+                miModelo.resetRonda()
+                //marcador = 0
+
+                textMarcador.text = miModelo.ronda.value.toString()
                 cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
                 recordMsg.text = ""
                 firstClick = true

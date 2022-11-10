@@ -15,4 +15,8 @@ class MyViewModel : ViewModel() {
     fun sumarRonda() {
         ronda.value = ronda.value?.plus(1)
     }
+
+    fun resetRonda() {
+        ronda.value = 0
+    }
 }
