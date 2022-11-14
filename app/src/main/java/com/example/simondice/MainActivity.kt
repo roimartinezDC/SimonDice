@@ -203,23 +203,35 @@ class MainActivity : AppCompatActivity() {
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         firstClick = false
-        val mp = MediaPlayer.create(this@MainActivity, R.raw.error)
-        mp.start()
+
         val error = GlobalScope.launch(Dispatchers.Main) {
             rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
             verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
             amarilloBtn.setBackgroundResource(R.drawable.hex_fallo)
             azulBtn.setBackgroundResource(R.drawable.hex_fallo)
-            delay(100L)
-            rojoBtn.setBackgroundResource(R.drawable.hex_background)
-            verdeBtn.setBackgroundResource(R.drawable.hex_background)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_background)
-            azulBtn.setBackgroundResource(R.drawable.hex_background)
-            delay(100L)
-            rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
-            verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
-            amarilloBtn.setBackgroundResource(R.drawable.hex_fallo)
-            azulBtn.setBackgroundResource(R.drawable.hex_fallo)
+            val error2 = GlobalScope.launch(Dispatchers.Main) {
+                val mp = MediaPlayer.create(this@MainActivity, R.raw.error1)
+                mp.start()
+                delay(100L)
+                rojoBtn.setBackgroundResource(R.drawable.hex_background)
+                verdeBtn.setBackgroundResource(R.drawable.hex_background)
+                amarilloBtn.setBackgroundResource(R.drawable.hex_background)
+                azulBtn.setBackgroundResource(R.drawable.hex_background)
+                val error3 = GlobalScope.launch(Dispatchers.Main) {
+                    delay(100L)
+                    rojoBtn.setBackgroundResource(R.drawable.hex_fallo)
+                    verdeBtn.setBackgroundResource(R.drawable.hex_fallo)
+                    amarilloBtn.setBackgroundResource(R.drawable.hex_fallo)
+                    azulBtn.setBackgroundResource(R.drawable.hex_fallo)
+                    val error4 = GlobalScope.launch(Dispatchers.Main) {
+                        val mp2 = MediaPlayer.create(this@MainActivity, R.raw.error2)
+                        mp2.start()
+                    }
+                    error4.join()
+                }
+                error3.join()
+            }
+            error2.join()
         }
         error.start()
 
