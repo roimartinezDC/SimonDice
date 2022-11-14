@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private var encenderColores : Job? = null
     private var tiempoTrans = 400L
     private val clickdelay = 250L
-    private var marcador = 0
+    //private var marcador = 0
     private var record = 0
     private var firstClick = false
     private var sonido : MediaPlayer? = null
@@ -104,14 +104,15 @@ class MainActivity : AppCompatActivity() {
             comprobar(btnAzul, R.drawable.hex_azul_encendido, R.drawable.hex_azul_apagado, R.raw.blue, 4, btnRojo, btnVerde, btnAmarillo, btnAzul)
         }
 
-        //este método actualiza dinámicamente el texto del textView marcador cada vez que se pasa de ronda
         miModelo.ronda.observe(
             this,
-            Observer(fun(nuevaRonda: Int) {
-                textMarcador.text = miModelo.ronda.value.toString()
-            })
+            androidx.lifecycle.Observer(
+                fun (nuevaRonda: Int) {
+                    if (miModelo.ronda.value != 0)
+                        textMarcador.text = miModelo.ronda.value.toString()
+                }
+            )
         )
-
     }
 
     private fun comprobar(btn : Button, colorEnc : Int, colorApg : Int, rutaSonido : Int, index : Int, brojo : Button, bverde : Button, bamarillo : Button, bazul : Button) {
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity() {
         start = true
 
         //sumamos uno a la instancia miModelo
-        //miModelo.sumarRonda()
+        miModelo.sumarRonda()
         //marcador++
 
         //validacion de nuevo record
@@ -181,8 +182,11 @@ class MainActivity : AppCompatActivity() {
             }
             roomCorrutine.start()
         }
+
         val textMarcador : TextView = findViewById(R.id.marcador)
-        textMarcador.text = miModelo.ronda.value.toString()
+        //se comenta esta línea porque la actualización del marcador ya se recoge en el Observer
+        //textMarcador.text = miModelo.ronda.value.toString()
+
         if ((miModelo.ronda.value.toString()).toInt() >= 10) {
             textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.resources.getDimension(R.dimen.marcador_small))
             textMarcador.setPadding(0, 77, 0, 0)

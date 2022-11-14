@@ -9,7 +9,7 @@ class MyViewModel : ViewModel() {
 
     // la variable se inicia al instanciar
     init {
-        ronda.value = 1
+        ronda.value = 0
     }
 
     fun sumarRonda() {
