@@ -107,7 +107,7 @@ class MainActivity : AppCompatActivity() {
         miModelo.ronda.observe(
             this,
             androidx.lifecycle.Observer(
-                fun (nuevaRonda: Int) {
+                fun (_: Int) {
                     if (miModelo.ronda.value != 0)
                         textMarcador.text = miModelo.ronda.value.toString()
                 }
@@ -122,10 +122,13 @@ class MainActivity : AppCompatActivity() {
                 if (arraySentencia == arrayColores) {
                     val enc = GlobalScope.launch(Dispatchers.Main) {
                         btn.setBackgroundResource(colorEnc)
-                        sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
-                        sonido?.start()
-                        delay(clickdelay)
-                        btn.setBackgroundResource(colorApg)
+                        val enc2 = GlobalScope.launch(Dispatchers.Main) {
+                            sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
+                            sonido?.start()
+                            delay(clickdelay)
+                            btn.setBackgroundResource(colorApg)
+                        }
+                        enc2.join()
                     }
                     enc.start()
                     colorAcierto(brojo, bverde, bamarillo, bazul)
@@ -139,10 +142,13 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     val enc = GlobalScope.launch(Dispatchers.Main) {
                         btn.setBackgroundResource(colorEnc)
-                        sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
-                        sonido?.start()
-                        delay(clickdelay)
-                        btn.setBackgroundResource(colorApg)
+                        val enc2 = GlobalScope.launch(Dispatchers.Main) {
+                            sonido = MediaPlayer.create(this@MainActivity, rutaSonido)
+                            sonido?.start()
+                            delay(clickdelay)
+                            btn.setBackgroundResource(colorApg)
+                        }
+                        enc2.join()
                     }
                     enc.start()
                 }
@@ -166,7 +172,6 @@ class MainActivity : AppCompatActivity() {
 
         //sumamos uno a la instancia miModelo
         miModelo.sumarRonda()
-        //marcador++
 
         //validacion de nuevo record
         //aquí cambié el valor de marcador por miModelo
@@ -271,31 +276,43 @@ class MainActivity : AppCompatActivity() {
                 when (arrayColores[i]) {
                     1 -> {
                         rojoBtn.setBackgroundResource(R.drawable.hex_rojo_encendido)
-                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.red)
-                        mp?.start()
-                        delay(tiempoTrans)
-                        rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+                        val encender1 = GlobalScope.launch(Dispatchers.Main) {
+                            val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.red)
+                            mp?.start()
+                            delay(tiempoTrans)
+                            rojoBtn.setBackgroundResource(R.drawable.hex_rojo_apagado)
+                        }
+                        encender1.join()
                     }
                     2 -> {
                         verdeBtn.setBackgroundResource(R.drawable.hex_verde_encendido)
-                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.green)
-                        mp?.start()
-                        delay(tiempoTrans)
-                        verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+                        val encender2  = GlobalScope.launch(Dispatchers.Main) {
+                            val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.green)
+                            mp?.start()
+                            delay(tiempoTrans)
+                            verdeBtn.setBackgroundResource(R.drawable.hex_verde_apagado)
+                        }
+                        encender2.join()
                     }
                     3 -> {
                         amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_encendido)
-                        val mp = MediaPlayer.create(this@MainActivity, R.raw.yellow)
-                        mp?.start()
-                        delay(tiempoTrans)
-                        amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+                        val encender3  = GlobalScope.launch(Dispatchers.Main) {
+                            val mp = MediaPlayer.create(this@MainActivity, R.raw.yellow)
+                            mp?.start()
+                            delay(tiempoTrans)
+                            amarilloBtn.setBackgroundResource(R.drawable.hex_amarillo_apagado)
+                        }
+                        encender3.join()
                     }
                     else -> {
                         azulBtn.setBackgroundResource(R.drawable.hex_azul_encendido)
-                        val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.blue)
-                        mp?.start()
-                        delay(tiempoTrans)
-                        azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
+                        val encender4  = GlobalScope.launch(Dispatchers.Main) {
+                            val mp : MediaPlayer? = MediaPlayer.create(this@MainActivity, R.raw.blue)
+                            mp?.start()
+                            delay(tiempoTrans)
+                            azulBtn.setBackgroundResource(R.drawable.hex_azul_apagado)
+                        }
+                        encender4.join()
                     }
                 }
             }
