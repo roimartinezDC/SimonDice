@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.updateLayoutParams
-import androidx.room.Room
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -162,23 +161,16 @@ class MainActivity : AppCompatActivity() {
 
         //validacion de nuevo record
         //aquí cambié el valor de marcador por miModelo
-        if ((miModelo.ronda.value.toString()).toInt() > (miModelo.record.value.toString()).toInt()) {
+        if (miModelo.ronda.value!! > miModelo.record.value!!) {
 
             miModelo.actualizarRecord()
 
             Toast.makeText(applicationContext, "¡Has establecido un nuevo récord!", Toast.LENGTH_SHORT).show()
-            val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
-                val room: RecordDB = Room
-                    .databaseBuilder(applicationContext,
-                        RecordDB::class.java, "records")
-                    .build()
-                room.recordDao().update(Record(1, (miModelo.ronda.value.toString()).toInt()))
-            }
-            roomCorrutine.start()
+
         }
 
         val textMarcador : TextView = findViewById(R.id.marcador)
-        //se comenta esta línea porque la actualización del marcador ya se recoge en el Observer
+        //se comenta esta línea porque la actualización del marcador ya se recognise en el Observer
         //textMarcador.text = miModelo.ronda.value.toString()
 
         if ((miModelo.ronda.value.toString()).toInt() >= 10) {

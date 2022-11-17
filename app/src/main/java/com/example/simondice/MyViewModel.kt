@@ -39,6 +39,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
     fun actualizarRecord() {
         record.value = ronda.value
+        val updateCorrutine = GlobalScope.launch(Dispatchers.Main) {
+            room!!.recordDao().update(Record(1, (ronda.value.toString()).toInt()))
+        }
+        updateCorrutine.start()
     }
     fun resetRecord() {
         val resetCorrutine = GlobalScope.launch(Dispatchers.Main) {
