@@ -39,8 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         //Fragmento de codigo para poder modificar el record de la base de datos
         //Debe estar siempre comentado
-        //room.recordDao().update(Record(1, 0))
-        //no se puede instanciar la bd en el hilo principal, por lo que se hace en una corrutine
+        //miModelo.resetRecord()
 
         val btnRojo : Button = findViewById(R.id.button_red)
         val btnVerde : Button = findViewById(R.id.button_green)

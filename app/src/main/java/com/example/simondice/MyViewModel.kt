@@ -40,6 +40,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun actualizarRecord() {
         record.value = ronda.value
     }
+    fun resetRecord() {
+        val resetCorrutine = GlobalScope.launch(Dispatchers.Main) {
+            room!!.recordDao().update(Record(1, 0))
+            record.value = room!!.recordDao().getAll()[0].puntuacion
+        }
+        resetCorrutine.start()
+    }
 
     fun sumarRonda() {
         ronda.value = ronda.value?.plus(1)
