@@ -26,42 +26,20 @@ class MainActivity : AppCompatActivity() {
     private var encenderColores : Job? = null
     private var tiempoTrans = 400L
     private val clickdelay = 250L
-    //private var marcador = 0
-    private var record = 0
     private var firstClick = false
     private var sonido : MediaPlayer? = null
     //instancia de la ViewModel
     private val miModelo by viewModels<MyViewModel>()
 
-
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        //no se puede instanciar la bd en el hilo principal, por lo que se hace en una corrutine
-        val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
-            //instancia de la bd
-            val room: RecordDB = Room
-                .databaseBuilder(applicationContext,
-                    RecordDB::class.java, "records")
-                .build()
-
-            //Fragmento de codigo para poder modificar el record de la base de datos
-            //Debe estar siempre comentado
-            //room.recordDao().update(Record(1, 0))
-
-            //establecemos variable local de record, a puntuación record en la BD
-            //try-catch para crear la BD en caso de que sea la primera vez que se ejecuta la app en un dispostivo
-            try {
-                record = room.recordDao().getAll()[0].puntuacion
-            } catch(ex : IndexOutOfBoundsException) {
-                room.recordDao().insert(listOf(Record(1, 0)))
-                record = room.recordDao().getAll()[0].puntuacion
-            }
-
-        }
-        roomCorrutine.start()
+        //Fragmento de codigo para poder modificar el record de la base de datos
+        //Debe estar siempre comentado
+        //miModelo.resetRecord()
 
         val btnRojo : Button = findViewById(R.id.button_red)
         val btnVerde : Button = findViewById(R.id.button_green)
@@ -110,6 +88,15 @@ class MainActivity : AppCompatActivity() {
                 fun (_: Int) {
                     if (miModelo.ronda.value != 0)
                         textMarcador.text = miModelo.ronda.value.toString()
+                }
+            )
+        )
+        miModelo.record.observe(
+            this,
+            androidx.lifecycle.Observer(
+                fun (_: Int) {
+                    val recordMsg : TextView = findViewById(R.id.recordMsg)
+                    recordMsg.text = "Récord: ${miModelo.record.value}"
                 }
             )
         )
@@ -175,8 +162,10 @@ class MainActivity : AppCompatActivity() {
 
         //validacion de nuevo record
         //aquí cambié el valor de marcador por miModelo
-        if ((miModelo.ronda.value.toString()).toInt() > record) {
-            record = (miModelo.ronda.value.toString()).toInt()
+        if ((miModelo.ronda.value.toString()).toInt() > (miModelo.record.value.toString()).toInt()) {
+
+            miModelo.actualizarRecord()
+
             Toast.makeText(applicationContext, "¡Has establecido un nuevo récord!", Toast.LENGTH_SHORT).show()
             val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
                 val room: RecordDB = Room
@@ -198,8 +187,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    @SuppressLint("SetTextI18n")
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         firstClick = false
@@ -243,10 +230,9 @@ class MainActivity : AppCompatActivity() {
             topMargin += 290
         }
 
-        val recordMsg : TextView = findViewById(R.id.recordMsg)
-        recordMsg.text = "Récord: $record"
-
         val textMarcador : TextView = findViewById(R.id.marcador)
+        val recordMsg : TextView = findViewById(R.id.recordMsg)
+        recordMsg.visibility = View.VISIBLE
 
         btnStart.setOnClickListener {
             val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
@@ -269,7 +255,7 @@ class MainActivity : AppCompatActivity() {
 
                 textMarcador.text = miModelo.ronda.value.toString()
                 cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
-                recordMsg.text = ""
+                recordMsg.visibility = View.INVISIBLE
                 firstClick = true
             }
             delayCorrutine.start()
