@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     //instancia de la ViewModel
     private val miModelo by viewModels<MyViewModel>()
 
-
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -88,6 +88,15 @@ class MainActivity : AppCompatActivity() {
                 fun (_: Int) {
                     if (miModelo.ronda.value != 0)
                         textMarcador.text = miModelo.ronda.value.toString()
+                }
+            )
+        )
+        miModelo.record.observe(
+            this,
+            androidx.lifecycle.Observer(
+                fun (_: Int) {
+                    val recordMsg : TextView = findViewById(R.id.recordMsg)
+                    recordMsg.text = "Récord: ${miModelo.record.value}"
                 }
             )
         )
@@ -178,8 +187,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    @SuppressLint("SetTextI18n")
     private fun colorError(rojoBtn : Button, verdeBtn : Button, amarilloBtn : Button, azulBtn : Button) {
         start = false
         firstClick = false
@@ -223,10 +230,9 @@ class MainActivity : AppCompatActivity() {
             topMargin += 290
         }
 
-        val recordMsg : TextView = findViewById(R.id.recordMsg)
-        recordMsg.text = "Récord: ${miModelo.record.value}"
-
         val textMarcador : TextView = findViewById(R.id.marcador)
+        val recordMsg : TextView = findViewById(R.id.recordMsg)
+        recordMsg.visibility = View.VISIBLE
 
         btnStart.setOnClickListener {
             val delayCorrutine = GlobalScope.launch(Dispatchers.Main) {
@@ -249,7 +255,7 @@ class MainActivity : AppCompatActivity() {
 
                 textMarcador.text = miModelo.ronda.value.toString()
                 cambiarColor(rojoBtn, verdeBtn, amarilloBtn, azulBtn, true)
-                recordMsg.text = ""
+                recordMsg.visibility = View.INVISIBLE
                 firstClick = true
             }
             delayCorrutine.start()
