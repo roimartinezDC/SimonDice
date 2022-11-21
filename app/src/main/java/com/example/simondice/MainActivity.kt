@@ -160,19 +160,13 @@ class MainActivity : AppCompatActivity() {
         miModelo.sumarRonda()
 
         //validacion de nuevo record
-        //aquí cambié el valor de marcador por miModelo
         if (miModelo.ronda.value!! > miModelo.record.value!!) {
-
             miModelo.actualizarRecord()
-
             Toast.makeText(applicationContext, "¡Has establecido un nuevo récord!", Toast.LENGTH_SHORT).show()
-
         }
 
+        //Redimensionamiento del tamaño del text del marcador cuando este llega a un número de 2 dígitos
         val textMarcador : TextView = findViewById(R.id.marcador)
-        //se comenta esta línea porque la actualización del marcador ya se recognise en el Observer
-        //textMarcador.text = miModelo.ronda.value.toString()
-
         if ((miModelo.ronda.value.toString()).toInt() >= 10) {
             textMarcador.setTextSize(TypedValue.COMPLEX_UNIT_PX, this.resources.getDimension(R.dimen.marcador_small))
             textMarcador.setPadding(0, 77, 0, 0)
