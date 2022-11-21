@@ -28,10 +28,10 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 
         val roomCorrutine = GlobalScope.launch(Dispatchers.Main) {
             try {
-                record.value = room!!.recordDao().getAll()[0].puntuacion
-            } catch(ex : IndexOutOfBoundsException) {
-                room!!.recordDao().insert(listOf(Record(1, 0)))
-                record.value = room!!.recordDao().getAll()[0].puntuacion
+                record.value = room!!.recordDao().getPuntuacion()
+            } catch(ex : java.lang.NullPointerException) {
+                room!!.recordDao().crearPuntuacion()
+                record.value = room!!.recordDao().getPuntuacion()
             }
         }
         roomCorrutine.start()
@@ -40,19 +40,19 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
     fun actualizarRecord() {
         record.value = ronda.value
         val updateCorrutine = GlobalScope.launch(Dispatchers.Main) {
-            room!!.recordDao().update(Record(1, (ronda.value.toString()).toInt()))
+            room!!.recordDao().update(Record(1, ronda.value!!))
         }
         updateCorrutine.start()
     }
     fun resetRecord() {
         val resetCorrutine = GlobalScope.launch(Dispatchers.Main) {
             room!!.recordDao().update(Record(1, 0))
-            record.value = room!!.recordDao().getAll()[0].puntuacion
+            record.value = room!!.recordDao().getPuntuacion()
         }
         resetCorrutine.start()
     }
 
-    fun sumarRonda() {
+    fun sumarRonda(){
         ronda.value = ronda.value?.plus(1)
     }
     fun resetRonda() {
