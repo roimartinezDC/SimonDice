@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         miModelo.record.observe(
             this,
             androidx.lifecycle.Observer(
-                fun (_: Int) {
+                fun (_: Int?) {
                     val recordMsg : TextView = findViewById(R.id.recordMsg)
                     recordMsg.text = "Récord: ${miModelo.record.value}"
                 }

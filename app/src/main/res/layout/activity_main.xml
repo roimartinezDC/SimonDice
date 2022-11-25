@@ -97,7 +97,7 @@
         android:textColor="@color/dark_gray"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/button_red"
         app:layout_constraintStart_toStartOf="parent" />
 
