@@ -36,10 +36,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
-        //Fragmento de codigo para poder modificar el record de la base de datos
-        //Debe estar siempre comentado
-        //miModelo.resetRecord()
-
         val btnRojo : Button = findViewById(R.id.button_red)
         val btnVerde : Button = findViewById(R.id.button_green)
         val btnAmarillo : Button = findViewById(R.id.button_yellow)
