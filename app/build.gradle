@@ -30,6 +30,21 @@ android {
         jvmTarget = '1.8'
     }
     namespace 'com.example.simondice'
+
+    // esto es para ejecutar la apk firmada cada vez que se hace Run
+    signingConfigs{
+        debug{
+            keyAlias 'key0'
+            keyPassword 'xxxxxx'
+            storeFile file('C:\\Users\\roima\\keystore\\KeyStore.jks')
+            storePassword 'xxxxxxx'
+        }
+    }
+    buildTypes {
+        debug{
+            signingConfig signingConfigs.debug
+        }
+    }
 }
 
 apply plugin: 'kotlin-kapt'
@@ -39,6 +54,9 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.1.0')
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
 
     implementation "androidx.room:room-ktx:2.4.3"
     kapt "androidx.room:room-compiler:2.4.3"
