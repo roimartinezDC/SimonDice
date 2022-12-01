@@ -35,9 +35,9 @@ android {
     signingConfigs{
         debug{
             keyAlias 'key0'
-            keyPassword 'xxxxxx'
+            keyPassword 'simondice'
             storeFile file('C:\\Users\\roima\\keystore\\KeyStore.jks')
-            storePassword 'xxxxxxx'
+            storePassword 'simondice'
         }
     }
     buildTypes {
