@@ -36,7 +36,7 @@ android {
         debug{
             keyAlias 'key0'
             keyPassword 'simondice'
-            storeFile file('C:\\Users\\roima\\keystore\\KeyStore.jks')
+            storeFile file('C:\\Users\\roima\\keystore\\AndroidKeyStore.jks')
             storePassword 'simondice'
         }
     }
